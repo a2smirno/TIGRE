@@ -432,6 +432,26 @@ AwminTV_ext = Extension(
     include_dirs=[NUMPY_INCLUDE, CUDA["include"], "../Common/CUDA/"],
 )
 
+minDTV_ext = Extension(
+    "_minDTV",
+    sources=include_headers(
+        [
+            "../Common/CUDA/TIGRE_common.cpp",
+            "../Common/CUDA/POCS_DTV.cu",
+            "../Common/CUDA/GpuIds.cpp",
+            "../Common/CUDA/gpuUtils.cu",
+            "tigre/utilities/cuda_interface/_minDTV.pyx",
+        ],
+        sdist=sys.argv[1] == "sdist",
+    ),
+    define_macros=[("IS_FOR_PYTIGRE", None)],
+    library_dirs=[CUDA["lib64"]],
+    libraries=["cudart"],
+    language="c++",
+    runtime_library_dirs=[CUDA["lib64"]] if not IS_WINDOWS else None,
+    include_dirs=[NUMPY_INCLUDE, CUDA["include"], "../Common/CUDA/"],
+)
+
 
 gpuUtils_ext = Extension(
     "_gpuUtils",
