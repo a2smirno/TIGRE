@@ -477,7 +477,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     data_files=[("data", [])],
-    ext_modules=[Ax_ext, Atb_ext, tvdenoising_ext, minTV_ext, AwminTV_ext, gpuUtils_ext],
+    ext_modules=[Ax_ext, Atb_ext, tvdenoising_ext, minTV_ext, AwminTV_ext, minDTV_ext, gpuUtils_ext],
     py_modules=["tigre.py"],
     cmdclass={"build_ext": BuildExtension},
     install_requires=["Cython", "matplotlib", "numpy", "scipy"],
