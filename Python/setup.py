@@ -476,7 +476,7 @@ setup(
     author="Ander Biguri, Reuben Lindroos, Sam Loescher",
     packages=find_packages(),
     include_package_data=True,
-    data_files=[("data", ["../Common/data/head.mat"])],
+    data_files=[("data", ["../Common/data/"])],
     ext_modules=[Ax_ext, Atb_ext, tvdenoising_ext, minTV_ext, AwminTV_ext, gpuUtils_ext],
     py_modules=["tigre.py"],
     cmdclass={"build_ext": BuildExtension},
