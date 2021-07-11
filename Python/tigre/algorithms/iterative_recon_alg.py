@@ -19,6 +19,7 @@ from tigre.utilities.im3Dnorm import im3DNORM
 from tigre.algorithms.single_pass_algorithms import FDK
 from _minTV import minTV
 from _AwminTV import AwminTV
+from _minDTV import minDTV
 import time
 import copy
 from tigre.utilities.gpu import GpuIds
@@ -365,6 +366,11 @@ class IterativeReconAlg(object):
         if self.gpuids is None:
             self.gpuids = GpuIds()
         return AwminTV(res_prev, dtvg, self.numiter_tv, self.delta, self.gpuids)
+
+    def minimizeDTV(self, res_prev, dtvg):
+        if self.gpuids is None:
+            self.gpuids = GpuIds()
+        return minDTV(res_prev, dtvg, self.numiter_tv, self.delta, self.gpuids)
 
     def error_measurement(self, res_prev, iter):
         if self.Quameasopts is not None:
