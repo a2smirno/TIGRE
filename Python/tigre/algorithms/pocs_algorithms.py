@@ -204,6 +204,19 @@ class AwASD_POCS(ASD_POCS):  # noqa: D101, N801
 
 awasd_pocs = decorator(AwASD_POCS, name="awasd_pocs")
 
+class DTV_ASD_POCS(ASD_POCS):  # noqa: D101, N801
+    __doc__ = ASD_POCS.__doc__
+
+    def __init__(self, proj, geo, angles, niter, **kwargs):
+
+        kwargs.update(dict(regularisation="minimizeDTV"))
+        kwargs.update(dict(blocksize=1))
+        if "delta" not in kwargs:
+            self.delta = np.array([-0.005], dtype=np.float32)[0]
+        ASD_POCS.__init__(self, proj, geo, angles, niter, **kwargs)
+
+
+dtv_asd_pocs = decorator(DTV_ASD_POCS, name="dtv_asd_pocs")
 
 class OS_ASD_POCS(ASD_POCS):
     __doc__ = ASD_POCS.__doc__
