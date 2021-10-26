@@ -460,6 +460,8 @@ do { \
         cudaFree(d_norm2aux);
         cudaFree(d_dimgTV);
         cudaFree(d_norm2);
+		cudaFree(phi);
+		cudaFree(grad_img);
 
         cudaCheckErrors("Memory free");
         cudaDeviceReset();
