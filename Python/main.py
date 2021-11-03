@@ -59,6 +59,8 @@ projections = tigre.Ax(shepp, geo, angles)
 # noise_projections = CTnoise.add(projections, Poisson=1e5, Gaussian=np.array([0, 10]))
 noise_projections = projections
 
+#%% recosntruct
+
 #%% Total Variation algorithms
 #
 #  ASD-POCS: Adaptative Steeppest Descent-Projection On Convex Subsets
@@ -123,7 +125,8 @@ verb = True
 
 niter = 10
 
-imgDTVASDPOCS = algs.dtv_asd_pocs(
+imgOSSART = algs.ossart(projections, geo, angles, niter)
+imgASDPOCS = algs.asd_pocs(
     projections,
     geo,
     angles,
@@ -134,18 +137,52 @@ imgDTVASDPOCS = algs.dtv_asd_pocs(
     lmbda=lmbda,
     lmbda_red=lambdared,
     rmax=ratio,
-    verbose=verb,  # DTV_ASD_POCS params
+    verbose=verb,
+)
+
+#  AwASD_POCS: adaptative weighted ASD_POCS
+# ==========================================================================
+# ==========================================================================
+#
+# This is a more edge preserving algorithms than ASD_POCS, in theory.
+# delta is the cuttof vlaue of anromalized edge exponential weight....
+# not super clear, but it cotnrols at which point you accept something as real vs noise edge.
+
+imgAWASDPOCS = algs.awasd_pocs(
+    projections,
+    geo,
+    angles,
+    10,  # these are very important
+    tviter=ng,
+    maxl2err=epsilon,
+    alpha=alpha,  # less important.
+    lmbda=lmbda,
+    lmbda_red=lambdared,
+    rmax=ratio,
+    verbose=verb,  # AwASD_POCS params
     delta=np.array([-0.005]),
 )
 
 # Measure Quality
 # 'RMSE', 'MSSIM', 'SSD', 'UQI'
+print("RMSE OSSART:")
+print(Measure_Quality(imgOSSART, shepp, ["nRMSE"]))
+print("RMSE ASDPOCS:")
+print(Measure_Quality(imgASDPOCS, shepp, ["nRMSE"]))
+print("RMSE AWASDPOCS:")
+print(Measure_Quality(imgAWASDPOCS, shepp, ["nRMSE"]))
 print("RMSE DTVASDPOCS:")
 print(Measure_Quality(imgDTVASDPOCS, shepp, ["nRMSE"]))
 
 #%% Plot
 plt.imsave('shepp-logan.png', shepp[0])
+plt.imsave('os-sart.png', imgOSSART[0])
+plt.imsave('asd-pocs.png', imgASDPOCS[0])
+plt.imsave('aw-asd-pocs.png', imgAWASDPOCS[0])
 plt.imsave('dtv-asd-pocs.png', imgDTVASDPOCS[0])
+plt.imsave('os-sart-err.png', imgOSSART[0]-shepp[0])
+plt.imsave('asd-pocs-err.png', imgASDPOCS[0]-shepp[0])
+plt.imsave('aw-asd-pocs-err.png', imgAWASDPOCS[0]-shepp[0])
 plt.imsave('dtv-asd-pocs-err.png', imgDTVASDPOCS[0]-shepp[0])
 
 # tigre.plotProj(proj)
